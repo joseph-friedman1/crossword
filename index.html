@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Little Crossword About Us ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff7f1;--card:#fff;--ink:#4a2a36;--soft:#9b6b7c;--pink:#f4a9c0;--pink2:#e0577f;--hl:#ffe1ea;--act:#ffb8cf;--line:#f0cfd9;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1620;--card:#3a2029;--ink:#fde8ef;--soft:#d9a5b6;--hl:#5a2b3c;--act:#8a3c58;--line:#5b3443;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#2a1620;--card:#3a2029;--ink:#fde8ef;--soft:#d9a5b6;--hl:#5a2b3c;--act:#8a3c58;--line:#5b3443;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,sans-serif;min-height:100vh}
+h1,h2{font-family:"Playfair Display",Georgia,serif;font-weight:600;margin:0}
+.screen[hidden]{display:none}
+#welcome{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 24px;position:relative;overflow:hidden}
+#welcome h1{font-size:clamp(30px,8vw,48px);line-height:1.15;margin-bottom:14px}
+#welcome p{color:var(--soft);font-size:18px;max-width:380px;margin:0 0 30px;line-height:1.5}
+.fl{position:absolute;bottom:-40px;opacity:.5;animation:up linear infinite;pointer-events:none}
+@keyframes up{to{transform:translateY(-110vh) rotate(25deg)}}
+.btn{font:700 16px Nunito,system-ui,sans-serif;border:0;border-radius:999px;padding:13px 22px;background:var(--card);color:var(--pink2);box-shadow:0 4px 14px rgba(224,87,127,.15);cursor:pointer}
+.btn.main{background:linear-gradient(135deg,#f58fb0,#e0577f);color:#fff;font-size:18px;padding:16px 34px;box-shadow:0 8px 22px rgba(224,87,127,.35);animation:pulse 2.4s infinite}
+@keyframes pulse{50%{transform:scale(1.04)}}
+.btn:active{transform:scale(.96)}
+#game{max-width:980px;margin:0 auto;padding:14px 12px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.top h2{font-size:20px}.chip{background:var(--card);border-radius:999px;padding:6px 14px;font-weight:700;color:var(--pink2);box-shadow:0 2px 8px rgba(224,87,127,.12)}
+.card{background:var(--card);border-radius:22px;box-shadow:0 6px 24px rgba(224,87,127,.12);padding:12px}
+#gw{overflow:auto;max-height:52vh;-webkit-overflow-scrolling:touch;border-radius:14px}
+#grid{display:grid;gap:2px;width:max-content;margin:0 auto;padding:4px}
+.cell{width:34px;height:34px;border-radius:7px;background:var(--card);border:1.5px solid var(--line);position:relative;display:flex;align-items:center;justify-content:center;font:700 19px Nunito,sans-serif;cursor:pointer;user-select:none}
+.cell.e{visibility:hidden;border:0}
+.cell .n{position:absolute;top:1px;left:3px;font-size:9px;color:var(--soft);font-weight:700}
+.cell.hl{background:var(--hl)}.cell.sel{background:var(--act);border-color:var(--pink2)}
+.cell.hint{color:var(--pink2)}.cell.bad{background:#ffd9d9;color:#c0283c;border-color:#e57a88}
+#bar{position:sticky;top:0;z-index:5;margin:10px 0;display:flex;align-items:center;gap:8px;background:var(--card);border-radius:18px;padding:8px 10px;box-shadow:0 4px 16px rgba(224,87,127,.18)}
+#bar span{flex:1;font-size:15px;line-height:1.3}.ar{border:0;background:var(--hl);color:var(--pink2);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
+.acts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0 14px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:620px){.cols{grid-template-columns:1fr}}
+.cols h3{margin:0 0 6px;color:var(--pink2);font-size:15px;letter-spacing:.08em;text-transform:uppercase}
+.cols ol{list-style:none;margin:0;padding:0}
+.cols li{padding:7px 9px;border-radius:10px;font-size:14px;line-height:1.35;cursor:pointer}
+.cols li b{color:var(--pink2);margin-right:6px}.cols li.cur{background:var(--hl)}.cols li.done{opacity:.5;text-decoration:line-through}
+#kb{position:fixed;left:0;bottom:0;width:1px;height:1px;opacity:0;font-size:16px;border:0;padding:0}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:.25s;z-index:30;pointer-events:none;text-align:center;max-width:90vw}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#done{position:fixed;inset:0;z-index:20;background:rgba(255,231,238,.94);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;overflow:auto}
+#done[hidden]{display:none}
+#done .card{max-width:460px;padding:30px 24px;animation:pop .6s}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+#done h2{font-size:32px;margin-bottom:14px}#done p{line-height:1.65;font-size:17px;margin:0 0 22px}
+.conf{position:fixed;top:-30px;z-index:25;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+</style></head><body>
+<section id="welcome" class="screen"></section>
+<section id="game" class="screen" hidden>
+ <div class="top"><h2>Our Crossword ❤️</h2><div class="chip" id="prog"></div></div>
+ <div class="card"><div id="gw"><div id="grid"></div></div></div>
+ <div id="bar"><button class="ar" id="pv" aria-label="Previous clue">‹</button><span id="clue"></span><button class="ar" id="nx" aria-label="Next clue">›</button></div>
+ <div class="acts"><button class="btn" id="dirb">⇄ Across / Down</button><button class="btn" id="chk">✓ Check</button><button class="btn" id="hnt">💡 Hint</button></div>
+ <div class="card cols"><div><h3>Across</h3><ol id="la"></ol></div><div><h3>Down</h3><ol id="ld"></ol></div></div>
+</section>
+<input id="kb" type="text" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Type letters">
+<div id="done" hidden><div class="card"><h2>You got them all! ❤️</h2><p>Turns out I remember quite a lot about you. 2.5 years of memories, little jokes, random conversations, and everything that makes you you. I wouldn’t trade any of it. Here’s to making a million more memories together. I love you.</p><button class="btn main" id="again">Play Again</button></div></div>
+<div id="toast"></div>
+<script>
+const D=[["WlZDX1RbVkRE", 5, 7, 1, "Where we first met."], ["UUVSUl9YW1NaVltb", 4, 18, 1, "Where we went on our first date."], ["R15bW1hARFJUQ15YWQ==", 18, 7, 0, "The part of the mall where our first date happened."], ["REJEX14=", 0, 8, 1, "One of her favorite foods."], ["R15ZXA==", 1, 13, 1, "Her favorite color."], ["VFhaR1ZERA==", 3, 0, 0, "A strange word I used when we first met."], ["X1JfUg==", 8, 5, 0, "A little expression she often uses."], ["WlZZX1ZDQ1ZZ", 3, 20, 1, "A city we’ve visited together."], ["WlZO", 13, 20, 0, "The month we started dating."], ["WlI=", 12, 18, 0, "Her favorite person."], ["RFtSUkc=", 14, 2, 0, "Something she absolutely loves (a good nap counts)."], ["RENFVkBVUkVFTkVSUUVSRF9SRQ==", 6, 4, 0, "Her Starbucks drink order."], ["WlZDXw==", 1, 3, 0, "The subject her boyfriend nerds out about."], ["WlZbU15BUkQ=", 12, 21, 1, "One of her dream vacation destinations (right next to Bora Bora)."], ["TVZUX1VFTlZZ", 8, 12, 1, "Her favorite country singer."], ["X05TRVZZUFJW", 3, 8, 0, "Her favorite flower."], ["VEJTU1tS", 1, 10, 1, "Something we like doing together."], ["VF9FXkRDWlZE", 8, 10, 1, "Her favorite holiday."], ["VllZVlpWRV5WXkRbVllT", 15, 7, 0, "Her favorite town."], ["VltY", 16, 1, 0, "One of her favorite clothing brands."], ["VkVeQ01eVg==", 10, 16, 1, "Another favorite clothing brand."], ["VUVWWVNOWlJbQV5bW1I=", 5, 14, 1, "Another favorite clothing brand."], ["XVZHVllSRFI=", 0, 4, 1, "One of her favorite cuisines (Italian is a close second)."], ["UF5RQ0Q=", 1, 18, 0, "Her favorite part of Christmas."], ["WV5QX0NYQFs=", 10, 0, 0, "What she is when she studies until 2 AM."], ["U1hUQ1hF", 9, 17, 0, "What she wants to become (she loves her medical TV shows)."], ["RF9YR0deWVA=", 5, 1, 1, "Her favorite hobby."], ["REJaWlJF", 1, 22, 1, "Her favorite season: warm weather, beach days, and swimming."], ["UEJaWl5SRA==", 12, 1, 0, "Her favorite sweet snack."], ["X1ZaXltDWFk=", 10, 3, 1, "The musical and show she loves."]];
+const KEY=23,dec=s=>[...atob(s)].map(c=>String.fromCharCode(c.charCodeAt(0)^KEY)).join('');
+const W=D.map(([e,r,c,d,cl])=>({a:dec(e),r,c,d,cl}));
+const cells={};let H=0,WD=0;
+W.forEach((w,i)=>{w.cells=[];for(let k=0;k<w.a.length;k++){const r=w.r+(w.d?k:0),c=w.c+(w.d?0:k),id=r+','+c;(cells[id]=cells[id]||{r,c,id,ch:w.a[k],w:[-1,-1]}).w[w.d]=i;w.cells.push(id);H=Math.max(H,r+1);WD=Math.max(WD,c+1)}});
+let nn=0;for(let r=0;r<H;r++)for(let c=0;c<WD;c++){const id=r+','+c;if(cells[id]&&W.some(w=>w.r==r&&w.c==c))cells[id].n=++nn}
+W.forEach(w=>w.n=cells[w.cells[0]].n);
+const ord=W.map((_,i)=>i).sort((a,b)=>W[a].d-W[b].d||W[a].n-W[b].n);
+const $=id=>document.getElementById(id),SK='xw-us-v1';
+let val={},hint={},bad=new Set(),sel=W[ord[0]].cells[0],dir=0,won=false;
+try{const s=JSON.parse(localStorage.getItem(SK)||'{}');val=s.val||{};hint=s.hint||{}}catch(e){}
+const save=()=>{try{localStorage.setItem(SK,JSON.stringify({val,hint}))}catch(e){}};
+// welcome
+const wel=$('welcome'),started=Object.keys(val).length>0;
+wel.innerHTML='<h1>A Little Crossword About Us ❤️</h1><p>30 little clues about you, me, and all the little things in between.</p><button class="btn main" id="go">'+(started?'Continue the Crossword':'Start the Crossword')+'</button>';
+for(let i=0;i<14;i++){const s=document.createElement('span');s.className='fl';s.textContent=i%3?'❤':'🌸';s.style.cssText='left:'+Math.random()*95+'%;font-size:'+(14+Math.random()*22)+'px;animation-duration:'+(9+Math.random()*10)+'s;animation-delay:-'+Math.random()*14+'s;color:#f4a9c0';wel.appendChild(s)}
+// grid
+const g=$('grid'),els={};g.style.gridTemplateColumns='repeat('+WD+',34px)';
+for(let r=0;r<H;r++)for(let c=0;c<WD;c++){const id=r+',',k=id+c,d=document.createElement('div'),x=cells[k];
+ if(!x){d.className='cell e'}else{d.className='cell';d.dataset.id=k;d.innerHTML=(x.n?'<span class="n">'+x.n+'</span>':'')+'<span class="l"></span>';els[k]=d}
+ g.appendChild(d)}
+const lis=W.map((w,i)=>{const li=document.createElement('li');li.dataset.i=i;li.innerHTML='<b>'+w.n+'</b>'+w.cl+' <small>('+w.a.length+')</small>';$(w.d?'ld':'la').appendChild(li);return li});
+ord.forEach(i=>$(W[i].d?'ld':'la').appendChild(lis[i]));
+const aw=()=>{const c=cells[sel];let i=c.w[dir];if(i<0){dir^=1;i=c.w[dir]}return i};
+const isDone=w=>w.cells.every(id=>val[id]===cells[id].ch);
+function paint(){const wi=aw(),act=new Set(W[wi].cells);
+ for(const id in els){const e=els[id];e.className='cell'+(act.has(id)?' hl':'')+(id==sel?' sel':'')+(bad.has(id)?' bad':'')+(hint[id]?' hint':'');e.lastChild.textContent=val[id]||''}
+ $('clue').innerHTML='<b>'+W[wi].n+(W[wi].d?' Down':' Across')+'</b> · '+W[wi].cl;
+ let n=0;lis.forEach((li,i)=>{const d=isDone(W[i]);if(d)n++;li.className=(i==wi?'cur ':'')+(d?'done':'')});
+ $('prog').textContent=n+' / 30';
+ els[sel].scrollIntoView({block:'nearest',inline:'nearest'})}
+const toast=m=>{const t=$('toast');t.textContent=m;t.className='on';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',2200)};
+function afterEdit(){save();paint();if(!won&&W.every(isDone)){won=true;setTimeout(win,600)}}
+function typ(l){val[sel]=l;bad.delete(sel);const w=W[aw()],k=w.cells.indexOf(sel);if(k<w.cells.length-1)sel=w.cells[k+1];afterEdit()}
+function back(){const w=W[aw()],k=w.cells.indexOf(sel);if(!val[sel]&&k>0)sel=w.cells[k-1];delete val[sel];delete hint[sel];bad.delete(sel);afterEdit()}
+function move(dr,dc){let r=cells[sel].r,c=cells[sel].c;for(let s=0;s<40;s++){r+=dr;c+=dc;if(r<0||c<0||r>=H||c>=WD)return;if(cells[r+','+c]){sel=r+','+c;const nd=dr?1:0;if(cells[sel].w[nd]>=0)dir=nd;return paint()}}}
+function go(i){dir=W[i].d;sel=W[i].cells.find(id=>!val[id])||W[i].cells[0];paint();$('kb').focus({preventScroll:true})}
+const kb=$('kb');
+kb.addEventListener('input',()=>{const s=kb.value.toUpperCase().replace(/[^A-Z]/g,'');kb.value='';for(const l of s)typ(l)});
+kb.addEventListener('keydown',e=>{const k=e.key;if(k=='Backspace'){e.preventDefault();back()}
+ else if(k=='ArrowLeft'){e.preventDefault();move(0,-1)}else if(k=='ArrowRight'){e.preventDefault();move(0,1)}
+ else if(k=='ArrowUp'){e.preventDefault();move(-1,0)}else if(k=='ArrowDown'){e.preventDefault();move(1,0)}
+ else if(k=='Tab'){e.preventDefault();step(e.shiftKey?-1:1)}else if(k==' '){e.preventDefault();dir^=1;paint()}});
+function step(s){const p=ord.indexOf(aw());go(ord[(p+s+30)%30])}
+g.addEventListener('click',e=>{const t=e.target.closest('.cell');if(!t||!t.dataset.id)return;const id=t.dataset.id;
+ if(id==sel){if(cells[id].w[0]>=0&&cells[id].w[1]>=0)dir^=1}else{sel=id;if(cells[id].w[dir]<0)dir^=1}
+ paint();kb.focus({preventScroll:true})});
+document.querySelector('.cols').addEventListener('click',e=>{const li=e.target.closest('li');if(li)go(+li.dataset.i)});
+$('pv').onclick=()=>step(-1);$('nx').onclick=()=>step(1);
+$('dirb').onclick=()=>{const c=cells[sel];if(c.w[dir^1]>=0){dir^=1;paint()}kb.focus({preventScroll:true})};
+$('chk').onclick=()=>{bad=new Set(Object.keys(val).filter(id=>val[id]!==cells[id].ch));paint();
+ toast(!Object.keys(val).length?'Fill in a few letters first 💕':bad.size?bad.size+(bad.size>1?' letters need':' letter needs')+' a second look 💭':'Everything so far is right! ✨')};
+$('hnt').onclick=()=>{let id=val[sel]===cells[sel].ch?W[aw()].cells.find(x=>val[x]!==cells[x].ch):sel;
+ if(!id)return toast('This word is already complete ✨');val[id]=cells[id].ch;hint[id]=1;bad.delete(id);sel=id;afterEdit();kb.focus({preventScroll:true})};
+$('go').onclick=()=>{wel.hidden=true;$('game').hidden=false;if(W.every(isDone)){won=true;win()}paint();window.scrollTo(0,0)};
+function win(){$('done').hidden=false;for(let i=0;i<70;i++){const s=document.createElement('span');s.className='conf';s.textContent=['❤️','💗','💕','🌸','✨'][i%5];
+ s.style.cssText='left:'+Math.random()*100+'%;font-size:'+(16+Math.random()*20)+'px;animation-duration:'+(2.5+Math.random()*3)+'s;animation-delay:'+Math.random()*1.5+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),8000)}}
+$('again').onclick=()=>{val={};hint={};bad.clear();won=false;save();$('done').hidden=true;sel=W[ord[0]].cells[0];dir=0;paint();window.scrollTo(0,0)};
+</script></body></html>
